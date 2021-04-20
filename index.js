@@ -71,23 +71,21 @@ client.connect(err => {
   //Admin Page Make Admin
   app.post('/admin/makeAdmin', (req, res) => {
     const makeAdmin = req.body;
-    console.log(makeAdmin);
     adminCollection.insertOne(makeAdmin)
       .then(result => {
-        console.log(result.insertedCount);
         res.send(result.insertedCount > 0);
       })
   })
 
   // show all added Admin
   app.get('/showAllAdmin', (req, res) => {
-    adminCollection.find({})
+    const email = req.body.email;
+    console.log(email);
+    adminCollection.find({ email: email })
       .toArray((err, documents) => {
-        res.send(documents);
+        res.send(documents.length > 0);
       })
   })
-
-
 
   //Customer page addOrder 
   app.post('/customer/serviceBooking', (req, res) => {
@@ -95,7 +93,6 @@ client.connect(err => {
     console.log(order)
     orderCollection.insertOne(order)
       .then(result => {
-        console.log(result.insertedCount);
         res.send(result.insertedCount > 0);
       })
   })
@@ -110,15 +107,12 @@ client.connect(err => {
 
   //Customer page addReview
   app.post('/customer/addReview', (req, res) => {
-    console.log(req.body);
     const name = req.body.name;
     const companyName = req.body.companyName;
     const description = req.body.description;
-    console.log(name, companyName, description);
 
     reviewCollection.insertOne({ name, companyName, description })
       .then(result => {
-        console.log(result);
         res.send(result.insertedCount > 0);
       })
   })
